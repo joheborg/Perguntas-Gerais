@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+  <title>Perguntas de conhecimentos gerais.</title>
+</head>
+
+<body>
+  <div class="container">
+    <table class="table table-bordered caption-top mt-3">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">Pergunta</th>
+          <th scope="col">A</th>
+          <th scope="col">B</th>
+          <th scope="col">C</th>
+          <th scope="col">D</th>
+          <th scope="col">% de acerto</th>
+        </tr>
+      </thead>
+      <tbody class="listaPerguntasGerais"></tbody>
+    </table>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="container d-md-flex justify-content-md-start col-md-6">
+        <button type="button" class="btn btn-primary me-md-2" onclick="$('#modalAdicionarPerguntas').modal('show');"><i
+            class="bi bi-file-plus"></i>Adicionar nova pergunta</button>
+      </div>
+      <div class="container d-md-flex justify-content-md-end col-md-6">
+        <button type="button" class="btn btn-primary me-md-2" onclick="verificarRespostaChecked();"><i
+            class="bi bi-send-plus"></i>Responder</button>
+      </div>
+    </div>
+  </div>
+
+
+
+</body>
+<!--MODAL ADICIONAR PERGUNTAS -->
+<div class="modal" tabindex="-1" id="modalAdicionarPerguntas">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Adicionar pergunta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="container mt-3 mb-3">
+        <div class="alert alert-warning" role="alert">
+          Após preencher o campos de respostas, selecione a alternativa correta.
+        </div>
+        <div class="row">
+          <div class=" col-md-4">
+            <label>Pergunta</label>
+            <input type="text" class="form-control" id="novaPergunta" aria-label="Text input with checkbox">
+          </div>
+          <div class="col-md-2">
+            <label>Resposta 1</label>
+            <div class="input-group">
+              <div class="input-group-text">
+                <input class="form-check-input" type="radio" id="novochecked1" value="1" name="resposta"
+                  aria-label="Checkbox for following text input">
+              </div>
+              <input type="text" class="form-control" id="novaresposta1" aria-label="Text input with checkbox">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label>Resposta 2</label>
+            <div class="input-group">
+              <div class="input-group-text">
+                <input class="form-check-input" type="radio" id="novochecked2" value="2" name="resposta"
+                  aria-label="Checkbox for following text input">
+              </div>
+              <input type="text" class="form-control" id="novaresposta2" aria-label="Text input with checkbox">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label>Resposta 3</label>
+            <div class="input-group">
+              <div class="input-group-text">
+                <input class="form-check-input" type="radio" id="novochecked3" value="3" name="resposta"
+                  aria-label="Checkbox for following text input">
+              </div>
+              <input type="text" class="form-control" id="novaresposta3" aria-label="Text input with checkbox">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label>Resposta 4</label>
+            <div class="input-group">
+              <div class="input-group-text">
+                <input class="form-check-input" type="radio" id="novochecked4" value="4" name="resposta"
+                  aria-label="Checkbox for following text input">
+              </div>
+              <input type="text" class="form-control" id="novaresposta4" aria-label="Text input with checkbox">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+          onclick="$('#modalAdicionarPerguntas').modal('hide');">Fechar</button>
+        <button type="button" class="btn btn-primary" onclick="salvarNovaPerguntaResposta();">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $.when(popularLista()).then(verificarRespostaSalvas());
+  })
+  let respostasCorrecao = [1, 2, 3, 4, 1, 2, 3, 4, 1, 2];
+  var respostarCorretas = ["Brasília", "Fêmur", "Nilo", "Antártica", "Baleia-azul", "Vaticano", "Ásia", "Pacífico", "Júpiter", "Ganimedes"]
+  function popularLista() {
+    var conhecimentosGerais = new Array(10);
+    for (var i = 0; i < conhecimentosGerais.length; i++) {
+      conhecimentosGerais[i] = new Array(5);
+    }
+    conhecimentosGerais[0][0] = "Qual é a capital do Brasil?";
+    conhecimentosGerais[0][1] = "Brasília";
+    conhecimentosGerais[0][2] = "São Paulo";
+    conhecimentosGerais[0][3] = "Brasília";
+    conhecimentosGerais[0][4] = "Belo Horizonte";
+
+    conhecimentosGerais[1][0] = "Qual é o maior osso do corpo humano?";
+    conhecimentosGerais[1][1] = "Fíbula";
+    conhecimentosGerais[1][2] = "Fêmur";
+    conhecimentosGerais[1][3] = "Úmero";
+    conhecimentosGerais[1][4] = "Tíbia";
+
+    conhecimentosGerais[2][0] = "Qual é o nome do maior rio do mundo em extensão?";
+    conhecimentosGerais[2][1] = "Yangtzé";
+    conhecimentosGerais[2][2] = "Amazonas";
+    conhecimentosGerais[2][3] = "Nilo";
+    conhecimentosGerais[2][4] = "Mississipi";
+
+    conhecimentosGerais[3][0] = "Qual é o nome do maior deserto do mundo em área?";
+    conhecimentosGerais[3][1] = "Saara";
+    conhecimentosGerais[3][2] = "Gobi";
+    conhecimentosGerais[3][3] = "Atacama";
+    conhecimentosGerais[3][4] = "Antártica";
+
+    conhecimentosGerais[4][0] = "Qual é o nome do maior animal do mundo?";
+    conhecimentosGerais[4][1] = "Baleia-azul";
+    conhecimentosGerais[4][2] = "Tubarão-branco";
+    conhecimentosGerais[4][3] = "Girafa";
+    conhecimentosGerais[4][4] = "Elefante africano";
+
+    conhecimentosGerais[5][0] = "Qual é o nome do menor país do mundo em área?";
+    conhecimentosGerais[5][1] = "San Marino";
+    conhecimentosGerais[5][2] = "Vaticano";
+    conhecimentosGerais[5][3] = "Nauru";
+    conhecimentosGerais[5][4] = "Mônaco";
+
+    conhecimentosGerais[6][0] = "Qual é o nome do maior continente do mundo em área?";
+    conhecimentosGerais[6][1] = "América";
+    conhecimentosGerais[6][2] = "África";
+    conhecimentosGerais[6][3] = "Ásia";
+    conhecimentosGerais[6][4] = "Europa";
+
+    conhecimentosGerais[7][0] = "Qual é o nome do maior oceano do mundo em área?";
+    conhecimentosGerais[7][1] = "Atlântico";
+    conhecimentosGerais[7][2] = "Ártico";
+    conhecimentosGerais[7][3] = "Índico";
+    conhecimentosGerais[7][4] = "Pacífico";
+
+    conhecimentosGerais[8][0] = "Qual é o nome do maior planeta do sistema solar em massa?";
+    conhecimentosGerais[8][1] = "Júpiter";
+    conhecimentosGerais[8][2] = "Urano";
+    conhecimentosGerais[8][3] = "Terra";
+    conhecimentosGerais[8][4] = "Saturno";
+
+    conhecimentosGerais[9][0] = "Qual é o nome do maior satélite natural do sistema solar em diâmetro?";
+    conhecimentosGerais[9][1] = "Titã";
+    conhecimentosGerais[9][2] = "Ganimedes";
+    conhecimentosGerais[9][3] = "Io";
+    conhecimentosGerais[9][4] = "Europa";
+    for (var x = 0; x < conhecimentosGerais.length; x++) {
+      var novalinha = `
+      <tr>
+        <td>${conhecimentosGerais[x][0]}</td>
+        <td>
+          <input class="form-check-input me-1" type="radio" value="1" id="firstRadio${x}" name="pergunta${x}">
+          <label class="form-check-label" for="firstRadio${x}">${conhecimentosGerais[x][1]}</label>
+        </td>
+        <td>
+          <input class="form-check-input me-1" type="radio" value="2" id="secondRadio${x}" name="pergunta${x}">
+          <label class="form-check-label" for="secondRadio${x}">${conhecimentosGerais[x][2]}</label>
+        </td>
+        <td>
+          <input class="form-check-input me-1" type="radio" value="3" id="thirdRadio${x}" name="pergunta${x}">
+          <label class="form-check-label" for="thirdRadio${x}">${conhecimentosGerais[x][3]}</label>
+        </td>
+        <td>
+          <input class="form-check-input me-1" type="radio" value="4" id="fourthRadio${x}" name="pergunta${x}">
+          <label class="form-check-label" for="fourthRadio${x}">${conhecimentosGerais[x][4]}</label>
+        </td>
+        <td id="correcao${x + 1}"></td>
+      </tr>
+`
+      $('.listaPerguntasGerais').append(novalinha)
+    }
+  }
+
+  function salvarNovaPerguntaResposta() {
+    let novaPergunta = $('#novaPergunta').val();
+    let novaResposta1 = $('#novaresposta1').val();
+    let novaResposta2 = $('#novaresposta2').val();
+    let novaResposta3 = $('#novaresposta3').val();
+    let novaResposta4 = $('#novaresposta4').val();
+    let alternativaCorreta = $('#modalAdicionarPerguntas input[type="radio"]:checked').val();
+    if (alternativaCorreta == undefined || alternativaCorreta == null || alternativaCorreta == '') {
+      alert("Selecione a resposta correta.");
+      return;
+    }
+    var dataToSend = { // enviar os dados no corpo da requisição
+      "pergunta": novaPergunta,
+      "resposta1": novaResposta1,
+      "resposta2": novaResposta2,
+      "resposta3": novaResposta3,
+      "resposta4": novaResposta4,
+      "correta": alternativaCorreta
+    }
+    $.ajax({
+      url: `http://localhost:5241/gravarnovapergunta`,
+      method: "POST", // usar o método POST
+      //data: JSON.parse(dataToSend),
+      data: dataToSend,
+      contentType: "application/json",
+    }).done(function (retorno) {
+      if (retorno == null){
+        alert("Pergunta já cadastrada.");
+        return;
+      };
+      alert(`Pergunta ${retorno} cadastrada com sucesso.`);
+    }).fail(function (jqXhr, textStatus, errorMessage) {
+      alert(jqXhr + "\n\r" + textStatus + "\n\r" + errorMessage + "\n\r");
+    });
+  }
+
+
+  function verificarRespostaChecked() {
+    var respostasCertas = 0;
+    // Obtém o número de linhas da tabela
+    let tamanhoTabela = $('#disponiveis tbody tr').length;
+    for (var x = 0; x < tamanhoTabela; x++) {
+      // Obtém o valor da célula que contém o input radio selecionado
+      let resposta = $(`#disponiveis tbody tr:eq(${x}) td input[type="radio"]:checked`).parent().text();
+      if (resposta == undefined || resposta == null) {
+        alert("Responda todas as perguntas para continuar.");
+        return;
+      }
+      if (resposta == respostasCorrecao[x]) {
+        respostasCertas++;
+      }
+      var correcao;
+      if (resposta == respostasCorrecao[x]) {
+        correcao = 1;
+      } else {
+        correcao = 0;
+      }
+      $.ajax({
+        url: `http://localhost:5241/gravarresposta/${x + 1}/${encodeURIComponent(resposta)}/${correcao}`
+      }).done(function () {
+        console.log(`Resposta da pergunta: ${x + 1} gravada. Resposta: ${resposta}`);
+      }).fail(function () {
+        console.log(`Resposta da pergunta: ${x + 1} falhou na hora da gravação`);
+      });
+    }
+    alert("Respostas erradas: " + (10 - respostasCertas) + "\n\rRespostas Corretas: " + respostasCertas);
+
+    verificarRespostaSalvas();
+  }
+
+  function verificarRespostaSalvas() {
+    $.ajax({
+      url: `http://localhost:5241/verificarrespostas`
+    }).done(function (retorno) {
+      retorno.forEach(element => {
+        $('#correcao' + element["idpergunta"]).html(((element["correcao"] / element["quantRespostas"]) * 100).toFixed(1) + "%");
+      });
+    }).fail(function (jqXhr, textStatus, errorMessage) {
+      console.log("The Status is : " + textStatus);
+    });
+  }
+
+</script>
+
+</html>
