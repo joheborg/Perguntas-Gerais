@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MongoDB.Driver;
 using Mvc_MongoDB.Models;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
@@ -30,27 +32,33 @@ app.UseCors();
 
 app.UseHttpsRedirection();
 
-app.MapGet("/gravarresposta/{idpergunta}/{resposta}/{correcao}", async (PerguntaService perguntaService, int idpergunta, string resposta, int correcao) =>
+app.MapGet("/gravarresposta/{idpergunta}/{resposta}/{correcao}", async (PerguntaService perguntaService, string idpergunta, string resposta, int correcao) =>
 {
     var novaPergunta = new Perguntas { idpergunta = idpergunta, resposta = resposta, correcao = correcao };
-    var perguntaCriada = await perguntaService.CreateClienteAsync(novaPergunta);
+    var perguntaCriada = await perguntaService.InsertRespostaAsync(novaPergunta);
 
     return $"Respostas gravadas com sucesso: {perguntaCriada.idpergunta}, {perguntaCriada.resposta}";
 });
-app.MapPost("/gravarnovapergunta", async (NovaPerguntaService novaPerguntaService, gravarNovaPergunta novaPergunta) =>
+app.MapGet("/perguntas", (NovaPerguntaService novaPerguntaService) =>
 {
-    var perguntaCriada = await novaPerguntaService.CreatePerguntaNovaAsync(novaPergunta);
-    return perguntaCriada;
+    return novaPerguntaService.FindPerguntas();
 });
+
+app.MapPost("/gravarnovapergunta", (NovaPerguntaService novaPerguntaService, gravarNovaPergunta novaPerguntanew) =>
+{
+    object perguntaCriada = novaPerguntaService.CreatePerguntaNova(novaPerguntanew);
+    return JsonSerializer.Serialize(perguntaCriada);
+});
+
 
 app.MapGet("/verificarrespostas", (PerguntaService perguntaService) =>
 {
-    var perguntaCriada = perguntaService.GetSum();
-
-    return perguntaCriada;
+    return perguntaService.GetSum();
 });
 
+
 app.Run();
+
 
 
 

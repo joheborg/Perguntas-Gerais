@@ -22,7 +22,6 @@
           <th scope="col">B</th>
           <th scope="col">C</th>
           <th scope="col">D</th>
-          <th scope="col">% de acerto</th>
         </tr>
       </thead>
       <tbody class="listaPerguntasGerais"></tbody>
@@ -115,97 +114,40 @@
   $(document).ready(function () {
     $.when(popularLista()).then(verificarRespostaSalvas());
   })
-  let respostasCorrecao = [1, 2, 3, 4, 1, 2, 3, 4, 1, 2];
-  var respostarCorretas = ["Brasília", "Fêmur", "Nilo", "Antártica", "Baleia-azul", "Vaticano", "Ásia", "Pacífico", "Júpiter", "Ganimedes"]
   function popularLista() {
-    var conhecimentosGerais = new Array(10);
-    for (var i = 0; i < conhecimentosGerais.length; i++) {
-      conhecimentosGerais[i] = new Array(5);
-    }
-    conhecimentosGerais[0][0] = "Qual é a capital do Brasil?";
-    conhecimentosGerais[0][1] = "Brasília";
-    conhecimentosGerais[0][2] = "São Paulo";
-    conhecimentosGerais[0][3] = "Brasília";
-    conhecimentosGerais[0][4] = "Belo Horizonte";
-
-    conhecimentosGerais[1][0] = "Qual é o maior osso do corpo humano?";
-    conhecimentosGerais[1][1] = "Fíbula";
-    conhecimentosGerais[1][2] = "Fêmur";
-    conhecimentosGerais[1][3] = "Úmero";
-    conhecimentosGerais[1][4] = "Tíbia";
-
-    conhecimentosGerais[2][0] = "Qual é o nome do maior rio do mundo em extensão?";
-    conhecimentosGerais[2][1] = "Yangtzé";
-    conhecimentosGerais[2][2] = "Amazonas";
-    conhecimentosGerais[2][3] = "Nilo";
-    conhecimentosGerais[2][4] = "Mississipi";
-
-    conhecimentosGerais[3][0] = "Qual é o nome do maior deserto do mundo em área?";
-    conhecimentosGerais[3][1] = "Saara";
-    conhecimentosGerais[3][2] = "Gobi";
-    conhecimentosGerais[3][3] = "Atacama";
-    conhecimentosGerais[3][4] = "Antártica";
-
-    conhecimentosGerais[4][0] = "Qual é o nome do maior animal do mundo?";
-    conhecimentosGerais[4][1] = "Baleia-azul";
-    conhecimentosGerais[4][2] = "Tubarão-branco";
-    conhecimentosGerais[4][3] = "Girafa";
-    conhecimentosGerais[4][4] = "Elefante africano";
-
-    conhecimentosGerais[5][0] = "Qual é o nome do menor país do mundo em área?";
-    conhecimentosGerais[5][1] = "San Marino";
-    conhecimentosGerais[5][2] = "Vaticano";
-    conhecimentosGerais[5][3] = "Nauru";
-    conhecimentosGerais[5][4] = "Mônaco";
-
-    conhecimentosGerais[6][0] = "Qual é o nome do maior continente do mundo em área?";
-    conhecimentosGerais[6][1] = "América";
-    conhecimentosGerais[6][2] = "África";
-    conhecimentosGerais[6][3] = "Ásia";
-    conhecimentosGerais[6][4] = "Europa";
-
-    conhecimentosGerais[7][0] = "Qual é o nome do maior oceano do mundo em área?";
-    conhecimentosGerais[7][1] = "Atlântico";
-    conhecimentosGerais[7][2] = "Ártico";
-    conhecimentosGerais[7][3] = "Índico";
-    conhecimentosGerais[7][4] = "Pacífico";
-
-    conhecimentosGerais[8][0] = "Qual é o nome do maior planeta do sistema solar em massa?";
-    conhecimentosGerais[8][1] = "Júpiter";
-    conhecimentosGerais[8][2] = "Urano";
-    conhecimentosGerais[8][3] = "Terra";
-    conhecimentosGerais[8][4] = "Saturno";
-
-    conhecimentosGerais[9][0] = "Qual é o nome do maior satélite natural do sistema solar em diâmetro?";
-    conhecimentosGerais[9][1] = "Titã";
-    conhecimentosGerais[9][2] = "Ganimedes";
-    conhecimentosGerais[9][3] = "Io";
-    conhecimentosGerais[9][4] = "Europa";
-    for (var x = 0; x < conhecimentosGerais.length; x++) {
-      var novalinha = `
-      <tr>
-        <td>${conhecimentosGerais[x][0]}</td>
+    $.ajax({
+      url: `http://localhost:5241/perguntas`
+    }).done(function (ret) {
+      ret.forEach((element) => {
+        var novalinha = `
+      <tr id="${element.id}">
+        <td >${element.pergunta}</td>
         <td>
-          <input class="form-check-input me-1" type="radio" value="1" id="firstRadio${x}" name="pergunta${x}">
-          <label class="form-check-label" for="firstRadio${x}">${conhecimentosGerais[x][1]}</label>
+          <input class="form-check-input me-1" type="radio" value="1" id="firstRadio" name="pergunta$">
+          <label class="form-check-label" for="firstRadio">${element.resposta1}</label>
         </td>
         <td>
-          <input class="form-check-input me-1" type="radio" value="2" id="secondRadio${x}" name="pergunta${x}">
-          <label class="form-check-label" for="secondRadio${x}">${conhecimentosGerais[x][2]}</label>
+          <input class="form-check-input me-1" type="radio" value="2" id="secondRadio" name="pergunta">
+          <label class="form-check-label" for="secondRadio">${element.resposta2}</label>
         </td>
         <td>
-          <input class="form-check-input me-1" type="radio" value="3" id="thirdRadio${x}" name="pergunta${x}">
-          <label class="form-check-label" for="thirdRadio${x}">${conhecimentosGerais[x][3]}</label>
+          <input class="form-check-input me-1" type="radio" value="3" id="thirdRadio" name="pergunta">
+          <label class="form-check-label" for="thirdRadio">${element.resposta3}</label>
         </td>
         <td>
-          <input class="form-check-input me-1" type="radio" value="4" id="fourthRadio${x}" name="pergunta${x}">
-          <label class="form-check-label" for="fourthRadio${x}">${conhecimentosGerais[x][4]}</label>
+          <input class="form-check-input me-1" type="radio" value="4" id="fourthRadio" name="pergunta">
+          <label class="form-check-label" for="fourthRadio">${element.resposta4}</label>
         </td>
-        <td id="correcao${x + 1}"></td>
+        <td style="display:none;">
+          <input value="${element.correta}" id="correcao" >
+        </td>
       </tr>
 `
-      $('.listaPerguntasGerais').append(novalinha)
-    }
+        $('.listaPerguntasGerais').append(novalinha)
+      })
+    }).fail(function () {
+      console.log('erro');
+    });
   }
 
   function salvarNovaPerguntaResposta() {
@@ -225,16 +167,15 @@
       "resposta2": novaResposta2,
       "resposta3": novaResposta3,
       "resposta4": novaResposta4,
-      "correta": alternativaCorreta
+      "correta": alternativaCorreta.toString()
     }
     $.ajax({
       url: `http://localhost:5241/gravarnovapergunta`,
-      method: "POST", // usar o método POST
-      //data: JSON.parse(dataToSend),
-      data: dataToSend,
+      method: "POST",
+      data: JSON.stringify(dataToSend), // Converta o objeto JavaScript para uma string JSON
       contentType: "application/json",
     }).done(function (retorno) {
-      if (retorno == null){
+      if (retorno == null) {
         alert("Pergunta já cadastrada.");
         return;
       };
@@ -248,33 +189,24 @@
   function verificarRespostaChecked() {
     var respostasCertas = 0;
     // Obtém o número de linhas da tabela
-    let tamanhoTabela = $('#disponiveis tbody tr').length;
+    let tamanhoTabela = $('.listaPerguntasGerais tr').length;
+    console.log(tamanhoTabela)
     for (var x = 0; x < tamanhoTabela; x++) {
       // Obtém o valor da célula que contém o input radio selecionado
-      let resposta = $(`#disponiveis tbody tr:eq(${x}) td input[type="radio"]:checked`).parent().text();
+      let idPergunta = $(`.listaPerguntasGerais tr`)[x].id.toString();
+      let resposta = $('#' + idPergunta + ' input[type="radio"]:checked').val()
+      let alternativaCorrecao = $('#' + idPergunta + ' #correcao').val()
       if (resposta == undefined || resposta == null) {
         alert("Responda todas as perguntas para continuar.");
         return;
       }
-      if (resposta == respostasCorrecao[x]) {
-        respostasCertas++;
-      }
-      var correcao;
-      if (resposta == respostasCorrecao[x]) {
-        correcao = 1;
-      } else {
-        correcao = 0;
-      }
       $.ajax({
-        url: `http://localhost:5241/gravarresposta/${x + 1}/${encodeURIComponent(resposta)}/${correcao}`
+        url: `http://localhost:5241/gravarresposta/${idPergunta}/${resposta}/${alternativaCorrecao}`
       }).done(function () {
-        console.log(`Resposta da pergunta: ${x + 1} gravada. Resposta: ${resposta}`);
-      }).fail(function () {
-        console.log(`Resposta da pergunta: ${x + 1} falhou na hora da gravação`);
-      });
+        console.log(`Resposta da pergunta: ${idPergunta} gravada. Resposta: ${resposta}`);
+      })
     }
     alert("Respostas erradas: " + (10 - respostasCertas) + "\n\rRespostas Corretas: " + respostasCertas);
-
     verificarRespostaSalvas();
   }
 

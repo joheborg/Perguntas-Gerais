@@ -23,19 +23,20 @@ namespace Mvc_MongoDB.Models
         }
     }
 
+    [BsonIgnoreExtraElements]
     public class gravarNovaPergunta
-    {  
-        // [BsonRepresentation(BsonType.ObjectId)]
-        public ObjectId Id { get; set; }
-        public int? idpergunta { get; set; }
+    {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? Id { get; set; }
         public string? pergunta { get; set; }
         public string? resposta1 { get; set; }
         public string? resposta2 { get; set; }
         public string? resposta3 { get; set; }
         public string? resposta4 { get; set; }
-        // usar o atributo BsonElement para especificar o nome do campo no documento
-        [BsonElement("correta")]
-        public int correta { get; set; }
-        
+        public string? correta { get; set; }
+        public string? obs { get; set; }
+
     }
+
 }
