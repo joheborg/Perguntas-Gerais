@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "DzgITF9IrESesq9iAn0aU7cva5HMq3rTTIg0tWNOfYR5lW7wVK+MN3Irgi0b/jjucNx1Uj7VHWTiayrfSRD9QQ==",
+  "dgSpecHash": "sHXxsYLROj7a8x5Ba2Sh5KQKHXL7mvFbrTAy63aymoSaAH13BxgszJRCsVnIBk8kPu7vUUkFAPVbkBjJGZbqbw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\joheb\\OneDrive\\Documentos\\GitHub\\Financas\\Perguntas-Gerais\\Perguntas-Gerais\\Perguntas-Gerais.csproj",
+  "projectFilePath": "C:\\Users\\joheb\\OneDrive\\Documentos\\GitHub\\Perguntas-Gerais\\Perguntas-Gerais\\Perguntas-Gerais.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\joheb\\.nuget\\packages\\awssdk.core\\3.7.100.14\\awssdk.core.3.7.100.14.nupkg.sha512",
     "C:\\Users\\joheb\\.nuget\\packages\\awssdk.securitytoken\\3.7.100.14\\awssdk.securitytoken.3.7.100.14.nupkg.sha512",

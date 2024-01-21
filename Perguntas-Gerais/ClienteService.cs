@@ -31,11 +31,12 @@ public class PerguntaService
     public List<Resultado> GetSum()
     {
         var resultado = _perguntas
-            .Find(g => g.idpergunta == g.idpergunta && g.resposta == g.correcao.ToString()).ToList();
+            //.Find(g => g.idpergunta == g.idpergunta && g.resposta == g.correcao.ToString()).ToList();
+            .Find(g => g.idpergunta == g.idpergunta).ToList();
         var agrupado = resultado
-            .GroupBy(p => p.idpergunta) // agrupa por idpergunta
-            .Select(g => new Resultado { idpergunta = g.Key, quantRespostas = g.Count() }) // seleciona os campos idpergunta e correcao e soma os valores de correcao de cada grupo
-            .ToList(); // converte para uma lista
+            .GroupBy(p => p.idpergunta)
+            .Select(g => new Resultado { idpergunta = g.Key, quantRespostas = g.Count(), correcao = g.Count(g => g.resposta == g.correcao.ToString()) }) 
+            .ToList();
         return agrupado;
     }
 
@@ -53,8 +54,7 @@ public class NovaPerguntaService
     public List<gravarNovaPergunta> CreatePerguntaNova(gravarNovaPergunta novaPergunta)
     {
         var resultado = _pergunta.Find(g => g.pergunta == novaPergunta.pergunta).ToList();
-
-        if (resultado[0].Id!.Length > 0)
+        if (resultado.Any())
         {
             var filter = Builders<gravarNovaPergunta>.Filter
                 .Eq("pergunta", resultado[0].pergunta);
@@ -69,6 +69,7 @@ public class NovaPerguntaService
             return resultadoupdate;
         }
         _pergunta.InsertOneAsync(novaPergunta);
+        
         var resultadoinsert = _pergunta.Find(g => g.pergunta == novaPergunta.pergunta).ToList();
         return resultadoinsert;
     }
@@ -78,7 +79,6 @@ public class NovaPerguntaService
     }
 
 }
-
 
 public class Resultado
 {

@@ -46,8 +46,7 @@ app.MapGet("/perguntas", (NovaPerguntaService novaPerguntaService) =>
 
 app.MapPost("/gravarnovapergunta", (NovaPerguntaService novaPerguntaService, gravarNovaPergunta novaPerguntanew) =>
 {
-    object perguntaCriada = novaPerguntaService.CreatePerguntaNova(novaPerguntanew);
-    return JsonSerializer.Serialize(perguntaCriada);
+    return novaPerguntaService.CreatePerguntaNova(novaPerguntanew);
 });
 
 

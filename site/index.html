@@ -14,24 +14,29 @@
 
 <body>
   <div class="container">
-    <table class="table table-bordered caption-top mt-3">
+    <table class="table  caption-top mt-3">
       <thead class="table-light">
         <tr>
           <th scope="col">Pergunta</th>
-          <th scope="col">A</th>
-          <th scope="col">B</th>
-          <th scope="col">C</th>
-          <th scope="col">D</th>
+          <th scope="col">&nbsp;</th>
+          <th scope="col">&nbsp;</th>
+          <th scope="col">&nbsp;</th>
+          <th scope="col">&nbsp;</th>
+          <th scope="col">% ACERTO</th>
         </tr>
       </thead>
-      <tbody class="listaPerguntasGerais"></tbody>
+      <tbody class="listaPerguntasGerais table-group-divider"></tbody>
     </table>
   </div>
   <div class="container">
     <div class="row">
-      <div class="container d-md-flex justify-content-md-start col-md-6">
+      <div class="container d-md-flex justify-content-md-start col-md-2">
         <button type="button" class="btn btn-primary me-md-2" onclick="$('#modalAdicionarPerguntas').modal('show');"><i
             class="bi bi-file-plus"></i>Adicionar nova pergunta</button>
+      </div>
+      <div class="container d-md-flex justify-content-md-start col-md-4">
+        <button type="button" class="btn btn-primary me-md-2" onclick="LimparRespostas();"><i
+            class="bi bi-file-plus"></i>Limpar Respostas</button>
       </div>
       <div class="container d-md-flex justify-content-md-end col-md-6">
         <button type="button" class="btn btn-primary me-md-2" onclick="verificarRespostaChecked();"><i
@@ -114,34 +119,48 @@
   $(document).ready(function () {
     $.when(popularLista()).then(verificarRespostaSalvas());
   })
+
+  function LimparRespostas() {
+    $('tbody tr td').css('background', '');
+    let tamanhoTabela = $('.listaPerguntasGerais tr').length;
+    for (var x = 0; x < tamanhoTabela || x <= 10; x++) {
+      let idPergunta = $(`.listaPerguntasGerais tr`)[x].id.toString();
+      let resposta = $('#' + idPergunta + ' input[type="radio"]:checked').val();
+      $('#' + idPergunta + ' #' + resposta + ' input').prop('checked', false);
+    }
+  }
+
   function popularLista() {
     $.ajax({
       url: `http://localhost:5241/perguntas`
     }).done(function (ret) {
       ret.forEach((element) => {
         var novalinha = `
-      <tr id="${element.id}">
-        <td >${element.pergunta}</td>
-        <td>
-          <input class="form-check-input me-1" type="radio" value="1" id="firstRadio" name="pergunta$">
-          <label class="form-check-label" for="firstRadio">${element.resposta1}</label>
-        </td>
-        <td>
-          <input class="form-check-input me-1" type="radio" value="2" id="secondRadio" name="pergunta">
-          <label class="form-check-label" for="secondRadio">${element.resposta2}</label>
-        </td>
-        <td>
-          <input class="form-check-input me-1" type="radio" value="3" id="thirdRadio" name="pergunta">
-          <label class="form-check-label" for="thirdRadio">${element.resposta3}</label>
-        </td>
-        <td>
-          <input class="form-check-input me-1" type="radio" value="4" id="fourthRadio" name="pergunta">
-          <label class="form-check-label" for="fourthRadio">${element.resposta4}</label>
-        </td>
-        <td style="display:none;">
-          <input value="${element.correta}" id="correcao" >
-        </td>
-      </tr>
+  <tr id="${element.id}">
+    <td>${element.pergunta}</td>
+    <td id="1">
+      <input type="radio" class="btn-check" id="firstRadio${element.id}" name="pergunta${element.id}" value="1" autocomplete="off">
+      <label class="btn" for="firstRadio${element.id}">${element.resposta1}</label>
+    </td>
+    <td id="2">
+      <input type="radio" class="btn-check" id="secondRadio${element.id}" name="pergunta${element.id}" value="2" autocomplete="off">
+      <label class="btn " for="secondRadio${element.id}">${element.resposta2}</label>
+    </td>
+    <td id="3">
+      <input type="radio" class="btn-check" id="thirdRadio${element.id}" name="pergunta${element.id}" value="3" autocomplete="off">
+      <label class="btn " for="thirdRadio${element.id}">${element.resposta3}</label>
+    </td>
+    <td id="4">
+      <input type="radio" class="btn-check" id="fourthRadio${element.id}" name="pergunta${element.id}" value="4" autocomplete="off">
+      <label class="btn " for="fourthRadio${element.id}">${element.resposta4}</label>
+    </td>
+    <td style="display:none;">
+      <input value="${element.correta}" id="correcao">
+    </td>
+    <td class="text-end" >
+      <label class="text-end" id="acertos${element.id}"></label>
+    </td>
+  </tr>
 `
         $('.listaPerguntasGerais').append(novalinha)
       })
@@ -157,6 +176,7 @@
     let novaResposta3 = $('#novaresposta3').val();
     let novaResposta4 = $('#novaresposta4').val();
     let alternativaCorreta = $('#modalAdicionarPerguntas input[type="radio"]:checked').val();
+    alternativaCorreta = $('#novaresposta' + alternativaCorreta).val();
     if (alternativaCorreta == undefined || alternativaCorreta == null || alternativaCorreta == '') {
       alert("Selecione a resposta correta.");
       return;
@@ -185,28 +205,31 @@
     });
   }
 
-
   function verificarRespostaChecked() {
     var respostasCertas = 0;
     // Obtém o número de linhas da tabela
     let tamanhoTabela = $('.listaPerguntasGerais tr').length;
-    console.log(tamanhoTabela)
     for (var x = 0; x < tamanhoTabela; x++) {
       // Obtém o valor da célula que contém o input radio selecionado
       let idPergunta = $(`.listaPerguntasGerais tr`)[x].id.toString();
       let resposta = $('#' + idPergunta + ' input[type="radio"]:checked').val()
       let alternativaCorrecao = $('#' + idPergunta + ' #correcao').val()
+      if (resposta == alternativaCorrecao) {
+        $('#' + idPergunta + ' td').css('background', 'rgba(111, 207, 64, 0.28)');
+        respostasCertas += 1;
+      } else {
+        $('#' + idPergunta + ' td').css('background', 'rgba(232, 67, 39, 0.21)');
+      }
       if (resposta == undefined || resposta == null) {
         alert("Responda todas as perguntas para continuar.");
         return;
       }
       $.ajax({
         url: `http://localhost:5241/gravarresposta/${idPergunta}/${resposta}/${alternativaCorrecao}`
-      }).done(function () {
-        console.log(`Resposta da pergunta: ${idPergunta} gravada. Resposta: ${resposta}`);
       })
+      // .done(function () {})
     }
-    alert("Respostas erradas: " + (10 - respostasCertas) + "\n\rRespostas Corretas: " + respostasCertas);
+    alert("Respostas erradas: " + (tamanhoTabela - respostasCertas) + "\n\rRespostas Corretas: " + respostasCertas);
     verificarRespostaSalvas();
   }
 
@@ -215,12 +238,13 @@
       url: `http://localhost:5241/verificarrespostas`
     }).done(function (retorno) {
       retorno.forEach(element => {
-        $('#correcao' + element["idpergunta"]).html(((element["correcao"] / element["quantRespostas"]) * 100).toFixed(1) + "%");
+        $('#acertos' + element.idpergunta).html(((element["correcao"] / element["quantRespostas"]) * 100).toFixed(0) + "%");
       });
     }).fail(function (jqXhr, textStatus, errorMessage) {
       console.log("The Status is : " + textStatus);
     });
   }
+
 
 </script>
 
