@@ -31,7 +31,6 @@ public class PerguntaService
     public List<Resultado> GetSum()
     {
         var resultado = _perguntas
-            //.Find(g => g.idpergunta == g.idpergunta && g.resposta == g.correcao.ToString()).ToList();
             .Find(g => g.idpergunta == g.idpergunta).ToList();
         var agrupado = resultado
             .GroupBy(p => p.idpergunta)
@@ -70,8 +69,7 @@ public class NovaPerguntaService
         }
         _pergunta.InsertOneAsync(novaPergunta);
         
-        var resultadoinsert = _pergunta.Find(g => g.pergunta == novaPergunta.pergunta).ToList();
-        return resultadoinsert;
+        return _pergunta.Find(g => g.pergunta == novaPergunta.pergunta).ToList();
     }
     public List<gravarNovaPergunta> FindPerguntas()
     {
