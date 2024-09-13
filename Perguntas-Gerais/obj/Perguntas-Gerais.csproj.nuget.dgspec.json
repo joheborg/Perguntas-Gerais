@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\joheb\\OneDrive\\Documentos\\GitHub\\Perguntas-Gerais\\Perguntas-Gerais\\Perguntas-Gerais.csproj": {}
+    "C:\\Pessoal\\GitHub\\Perguntas-Gerais\\Perguntas-Gerais\\Perguntas-Gerais.csproj": {}
   },
   "projects": {
-    "C:\\Users\\joheb\\OneDrive\\Documentos\\GitHub\\Perguntas-Gerais\\Perguntas-Gerais\\Perguntas-Gerais.csproj": {
+    "C:\\Pessoal\\GitHub\\Perguntas-Gerais\\Perguntas-Gerais\\Perguntas-Gerais.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\joheb\\OneDrive\\Documentos\\GitHub\\Perguntas-Gerais\\Perguntas-Gerais\\Perguntas-Gerais.csproj",
+        "projectUniqueName": "C:\\Pessoal\\GitHub\\Perguntas-Gerais\\Perguntas-Gerais\\Perguntas-Gerais.csproj",
         "projectName": "Perguntas-Gerais",
-        "projectPath": "C:\\Users\\joheb\\OneDrive\\Documentos\\GitHub\\Perguntas-Gerais\\Perguntas-Gerais\\Perguntas-Gerais.csproj",
+        "projectPath": "C:\\Pessoal\\GitHub\\Perguntas-Gerais\\Perguntas-Gerais\\Perguntas-Gerais.csproj",
         "packagesPath": "C:\\Users\\joheb\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\joheb\\OneDrive\\Documentos\\GitHub\\Perguntas-Gerais\\Perguntas-Gerais\\obj\\",
+        "outputPath": "C:\\Pessoal\\GitHub\\Perguntas-Gerais\\Perguntas-Gerais\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\joheb\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -32,6 +32,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -74,7 +79,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

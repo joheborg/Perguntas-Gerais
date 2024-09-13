@@ -189,7 +189,7 @@
       "correta": alternativaCorreta.toString()
     }
     $.ajax({
-      url: `http://localhost:5241/gravarnovapergunta`,
+      url: `http://localhost:5241/pergunta`,
       method: "POST",
       data: JSON.stringify(dataToSend), // Converta o objeto JavaScript para uma string JSON
       contentType: "application/json",
@@ -223,10 +223,17 @@
         alert("Responda todas as perguntas para continuar.");
         return;
       }
+      let dataPacket = {
+        "idPergunta": idPergunta,
+        "resposta": resposta,
+        "alternativaCorrecao": alternativaCorrecao
+      }
       $.ajax({
-        url: `http://localhost:5241/gravarresposta/${idPergunta}/${resposta}/${alternativaCorrecao}`
+        url: `http://localhost:5241/resposta`
+        , method: "POST"
+        , data: JSON.stringify(dataPacket)
+        , contentType: "application/json"
       })
-      // .done(function () {})
     }
     alert("Respostas erradas: " + (tamanhoTabela - respostasCertas) + "\n\rRespostas Corretas: " + respostasCertas);
     verificarRespostaSalvas();
@@ -234,7 +241,7 @@
 
   function verificarRespostaSalvas() {
     $.ajax({
-      url: `http://localhost:5241/verificarrespostas`
+      url: `http://localhost:5241/respostas`
     }).done(function (retorno) {
       retorno.forEach(element => {
         $('#acertos' + element.idpergunta).html(((element["correcao"] / element["quantRespostas"]) * 100).toFixed(0) + "%");
